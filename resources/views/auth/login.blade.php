@@ -93,7 +93,7 @@
         </button>
       </form>
 
-      <!-- Demo Accounts Info -->
+      <!-- Demo Accounts Info
       <div class="mt-6 pt-6 border-t border-gray-200">
         <p class="text-xs text-gray-500 text-center mb-3 font-semibold">Akun Demo:</p>
         <div class="space-y-2 text-xs">
@@ -110,7 +110,7 @@
             <p class="text-gray-600">kasir@tokoikan.com / kasir123</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Footer -->
