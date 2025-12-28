@@ -42,17 +42,14 @@
       scrollbar-width: none;
     }
 
-    /* Custom shadows */
     .shadow-soft {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
-    /* Smooth transitions */
     * {
       transition: all 0.2s ease;
     }
 
-    /* Active menu item */
     .menu-active {
       background-color: #dbeafe;
       color: #1e40af;
@@ -80,22 +77,28 @@
           </div>
         </div>
 
-        <!-- Right: User & Notification -->
+        <!-- Right: User & Logout -->
         <div class="flex items-center space-x-2">
-          <!-- Notification Bell -->
-          <button class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 relative">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
-
           <!-- User Profile -->
-          <button class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100">
+          <div class="flex items-center space-x-2 px-3 py-2 rounded-lg bg-gray-50">
             <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
-              A
+              {{ substr(auth()->user()->name, 0, 1) }}
             </div>
-          </button>
+            <div class="hidden sm:block">
+              <p class="text-sm font-semibold text-gray-800">{{ auth()->user()->name }}</p>
+              <p class="text-xs text-gray-500 capitalize">{{ auth()->user()->role }}</p>
+            </div>
+          </div>
+
+          <!-- Logout -->
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="p-2 rounded-lg text-red-600" title="Logout">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -115,13 +118,14 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-gray-800">Toko Ikan Hias</h2>
-              <p class="text-xs text-gray-500">Management System</p>
+              <p class="text-xs text-gray-500 capitalize">{{ auth()->user()->role }}</p>
             </div>
           </div>
         </div>
 
         <!-- Navigation Menu -->
         <nav class="p-4 space-y-1">
+          <!-- Dashboard - All roles -->
           <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('dashboard') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -129,6 +133,7 @@
             <span class="text-sm">Dashboard</span>
           </a>
 
+          <!-- Stok Ikan - Kasir, Admin, Superadmin -->
           <a href="{{ route('fish.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('fish.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -136,6 +141,7 @@
             <span class="text-sm">Stok Ikan</span>
           </a>
 
+          <!-- Penjualan - Kasir, Admin, Superadmin -->
           <a href="{{ route('sales.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('sales.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -143,25 +149,7 @@
             <span class="text-sm">Penjualan</span>
           </a>
 
-          <a href="{{ route('purchases.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('purchases.*') ? 'menu-active' : '' }}">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            <span class="text-sm">Pembelian</span>
-          </a>
-
-          <a href="{{ route('expenses.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('expenses.*') ? 'menu-active' : '' }}">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span class="text-sm">Pengeluaran</span>
-          </a>
-
-          <!-- Divider -->
-          <div class="py-2">
-            <div class="border-t border-gray-200"></div>
-          </div>
-
+          <!-- Pelanggan - Kasir, Admin, Superadmin -->
           <a href="{{ route('customers.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('customers.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -169,6 +157,29 @@
             <span class="text-sm">Pelanggan</span>
           </a>
 
+          @if(auth()->user()->hasRole(['admin', 'superadmin']))
+          <!-- Divider -->
+          <div class="py-2">
+            <div class="border-t border-gray-200"></div>
+          </div>
+
+          <!-- Pembelian - Admin, Superadmin -->
+          <a href="{{ route('purchases.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('purchases.*') ? 'menu-active' : '' }}">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span class="text-sm">Pembelian</span>
+          </a>
+
+          <!-- Pengeluaran - Admin, Superadmin -->
+          <a href="{{ route('expenses.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('expenses.*') ? 'menu-active' : '' }}">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span class="text-sm">Pengeluaran</span>
+          </a>
+
+          <!-- Supplier - Admin, Superadmin -->
           <a href="{{ route('suppliers.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('suppliers.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -181,6 +192,7 @@
             <div class="border-t border-gray-200"></div>
           </div>
 
+          <!-- Kematian Ikan - Admin, Superadmin -->
           <a href="{{ route('mortality.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('mortality.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -188,6 +200,7 @@
             <span class="text-sm">Kematian Ikan</span>
           </a>
 
+          <!-- Karantina - Admin, Superadmin -->
           <a href="{{ route('quarantine.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('quarantine.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -200,12 +213,29 @@
             <div class="border-t border-gray-200"></div>
           </div>
 
+          <!-- Laporan - Admin, Superadmin -->
           <a href="{{ route('reports.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('reports.*') ? 'menu-active' : '' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span class="text-sm">Laporan</span>
           </a>
+          @endif
+
+          @if(auth()->user()->isSuperAdmin())
+          <!-- Divider -->
+          <div class="py-2">
+            <div class="border-t border-gray-200"></div>
+          </div>
+
+          <!-- Manajemen User - Superadmin only -->
+          <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 {{ request()->routeIs('users.*') ? 'menu-active' : '' }}">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <span class="text-sm">Manajemen User</span>
+          </a>
+          @endif
         </nav>
       </div>
     </aside>
@@ -277,19 +307,29 @@
         <span class="text-xs mt-2 text-primary-600 font-semibold">Jual</span>
       </a>
 
-      <a href="{{ route('expenses.index') }}" class="flex flex-col items-center justify-center flex-1 h-full {{ request()->routeIs('expenses.*') ? 'text-primary-600' : 'text-gray-600' }} hover:text-primary-600">
+      <a href="{{ route('customers.index') }}" class="flex flex-col items-center justify-center flex-1 h-full {{ request()->routeIs('customers.*') ? 'text-primary-600' : 'text-gray-600' }} hover:text-primary-600">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        <span class="text-xs mt-1 font-medium">Biaya</span>
+        <span class="text-xs mt-1 font-medium">Customer</span>
       </a>
 
+      @if(auth()->user()->hasRole(['admin', 'superadmin']))
       <a href="{{ route('reports.index') }}" class="flex flex-col items-center justify-center flex-1 h-full {{ request()->routeIs('reports.*') ? 'text-primary-600' : 'text-gray-600' }} hover:text-primary-600">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
         <span class="text-xs mt-1 font-medium">Laporan</span>
       </a>
+      @else
+      <!-- Untuk Kasir, tampilkan menu lain atau kosongkan -->
+      <a href="{{ route('sales.index') }}" class="flex flex-col items-center justify-center flex-1 h-full {{ request()->routeIs('sales.index') ? 'text-primary-600' : 'text-gray-600' }} hover:text-primary-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        <span class="text-xs mt-1 font-medium">Riwayat</span>
+      </a>
+      @endif
     </div>
   </nav>
 
@@ -319,13 +359,13 @@
     }
 
     // Auto hide flash messages
-    setTimeout(() => {
-      const alerts = document.querySelectorAll('[class*="bg-green-50"], [class*="bg-red-50"]');
-      alerts.forEach(alert => {
-        alert.style.opacity = '0';
-        setTimeout(() => alert.remove(), 300);
-      });
-    }, 5000);
+    // setTimeout(() => {
+    //   const alerts = document.querySelectorAll('.mb-4.bg-green-50, .mb-4.bg-red-50');
+    //   alerts.forEach(alert => {
+    //     alert.style.opacity = '0';
+    //     setTimeout(() => alert.remove(), 300);
+    //   });
+    // }, 5000);
   </script>
 </body>
 

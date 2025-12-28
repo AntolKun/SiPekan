@@ -14,7 +14,7 @@ class ReportController extends Controller
   public function index(Request $request)
   {
     // Tentukan periode
-    $period = $request->get('period', 'today');
+    $period = $request->get('period', 'month');
     $startDate = $request->get('start_date');
     $endDate = $request->get('end_date');
 
