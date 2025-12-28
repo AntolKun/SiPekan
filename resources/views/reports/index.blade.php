@@ -386,5 +386,5 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 {{-- Report Scripts --}}
-<script src="{{ asset('js/reports.js') }}"></script>
+<script src="{{ secure_asset('js/reports.js') }}"></script>
 @endsection
